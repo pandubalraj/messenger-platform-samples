@@ -62,6 +62,7 @@ if (!(APP_SECRET && VALIDATION_TOKEN && PAGE_ACCESS_TOKEN && SERVER_URL)) {
  *
  */
 app.get('/webhook', function(req, res) {
+  console.log("inside GET webhook");
   if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === VALIDATION_TOKEN) {
     console.log("Validating webhook");
@@ -81,6 +82,7 @@ app.get('/webhook', function(req, res) {
  *
  */
 app.post('/webhook', function (req, res) {
+  console.log("inside POST webhook");
   var data = req.body;
 
   // Make sure this is a page subscription
@@ -93,6 +95,7 @@ app.post('/webhook', function (req, res) {
 
       // Iterate over each messaging event
       pageEntry.messaging.forEach(function(messagingEvent) {
+        console.log(JSON.stringify(messagingEvent));
         if (messagingEvent.optin) {
           receivedAuthentication(messagingEvent);
         } else if (messagingEvent.message) {
@@ -216,6 +219,8 @@ function receivedAuthentication(event) {
  * 
  */
 function receivedMessage(event) {
+  console.log("inside received Message");
+  console.log("Event"+event);
   var senderID = event.sender.id;
   var recipientID = event.recipient.id;
   var timeOfMessage = event.timestamp;
